@@ -27,8 +27,8 @@ ENV/
 .venv
 
 # Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints/
+#.ipynb_checkpoints
+#*.ipynb_checkpoints/
 
 # IDE
 .vscode/
@@ -44,9 +44,9 @@ Thumbs.db
 # Project specific
 # Keep organized dataset, ignore original unorganized folders
 
-# Large dataset files (if needed)
+
+# Large dataset files
 dataset.zip
-# Uncomment above if you want to ignore the zip file
 
 # Model outputs (generated during training)
 models/*.pth
