@@ -43,10 +43,6 @@ Thumbs.db
 
 # Project specific
 # Keep organized dataset, ignore original unorganized folders
-glioma/
-healthy/
-meningioma/
-pituitary/
 
 # Large dataset files (if needed)
 dataset.zip
