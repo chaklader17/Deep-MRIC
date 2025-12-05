@@ -107,7 +107,7 @@ pip install -r requirements.txt
 #### Windows & Linux:
 ```bash
 # Clone the repository
-git clone https://github.com/<your_username>/Deep-MRIC.git
+git clone https://github.com/chaklader17/Deep-MRIC.git
 cd Deep-MRIC
 
 # Create conda environment from environment.yml
