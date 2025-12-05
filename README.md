@@ -1,8 +1,4 @@
-Here is the **entire README as ONE clean markdown block**, ready to copy-paste into GitHub with **no breaks, no meta text, no extra notes**.
-
----
-
-```markdown
+markdown
 # 🧠 Brain Tumor Detection & Classification using VGG16 and YOLOv8  
 Automated MRI Analysis Using Deep Learning (Classification + Localization)
 
