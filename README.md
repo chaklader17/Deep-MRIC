@@ -235,16 +235,8 @@ tqdm
 | ---------- | -------------- | --------------------------------- |
 | **VGG16**  | Classification | High accuracy & F1-score          |
 | **YOLOv8** | Detection      | High mAP & precise bounding boxes |
-
-Add your own screenshots, training curves, and predictions.
-
 ---
 
-# 🤝 Contributing
-
-Pull requests are welcome.
-
----
 
 # 📜 License
 
@@ -256,9 +248,4 @@ This project is free for research and educational use.
 
 If this project helps you, please **⭐ star the repo** on GitHub!
 
-```
 
----
-
-If you want, I can also generate a **banner image**, a **GIF demo**, or **sample output plots** for your README.
-```
