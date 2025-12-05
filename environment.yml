@@ -1,0 +1,17 @@
+name: deep-mric
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8,<3.12
+  - pip
+  - jupyter
+  - ipykernel
+  - numpy>=1.21.0
+  - scikit-learn>=1.0.0
+  - tqdm>=4.62.0
+  - matplotlib>=3.5.0
+  - pip:
+    - opencv-python>=4.5.0
+    - ipywidgets>=7.6.0
+

@@ -1,0 +1,23 @@
+# Requirements for VGG16 Brain Tumor Classification Preprocessing
+# Compatible with both Windows and Linux
+
+# Computer Vision
+opencv-python>=4.5.0
+
+# Numerical Computing
+numpy>=1.21.0
+
+# Progress Bars
+tqdm>=4.62.0
+
+# Machine Learning Utilities
+scikit-learn>=1.0.0
+
+# Jupyter Notebook Support
+jupyter>=1.0.0
+ipykernel>=6.0.0
+
+# Optional: For better notebook experience
+matplotlib>=3.5.0
+ipywidgets>=7.6.0
+
