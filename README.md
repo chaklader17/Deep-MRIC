@@ -73,7 +73,7 @@ Deep-MRIC/
 #### Windows:
 ```bash
 # Clone the repository
-git clone https://github.com/<your_username>/Deep-MRIC.git
+git clone https://github.com/chaklader17/Deep-MRIC.git
 cd Deep-MRIC
 
 # Create virtual environment
@@ -89,7 +89,7 @@ pip install -r requirements.txt
 #### Linux/macOS:
 ```bash
 # Clone the repository
-git clone https://github.com/<your_username>/Deep-MRIC.git
+git clone https://github.com/chaklader17/Deep-MRIC.git
 cd Deep-MRIC
 
 # Create virtual environment

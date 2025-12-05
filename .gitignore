@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+# Keep organized dataset, ignore original unorganized folders
+glioma/
+healthy/
+meningioma/
+pituitary/
+
+# Large dataset files (if needed)
+dataset.zip
+# Uncomment above if you want to ignore the zip file
+
+# Model outputs (generated during training)
+models/*.pth
+models/*.pt
+!models/.gitkeep
+
+# Training outputs
+runs/
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+

@@ -1,23 +1,40 @@
 # Requirements for VGG16 Brain Tumor Classification Preprocessing
 # Compatible with both Windows and Linux
+#
+# To install all requirements:
+#   pip install -r requirements.txt
+#
+# For Jupyter Notebook (preprocess_vgg16.ipynb), all packages below are required
 
-# Computer Vision
+# ===== Core Dependencies (Required for preprocessing) =====
+
+# Computer Vision - Image processing and brain region cropping
 opencv-python>=4.5.0
 
-# Numerical Computing
+# Numerical Computing - Array operations
 numpy>=1.21.0
 
-# Progress Bars
+# Progress Bars - Visual progress indicators during processing
 tqdm>=4.62.0
 
-# Machine Learning Utilities
+# Machine Learning Utilities - Stratified train/test split
 scikit-learn>=1.0.0
 
-# Jupyter Notebook Support
+# ===== Jupyter Notebook Support (Required for preprocess_vgg16.ipynb) =====
+
+# Jupyter Notebook - Interactive notebook environment
 jupyter>=1.0.0
+
+# IPython Kernel - Python kernel for Jupyter
 ipykernel>=6.0.0
 
-# Optional: For better notebook experience
+# ===== Visualization (Required for notebook visualization cells) =====
+
+# Matplotlib - Plotting and image display in notebook
 matplotlib>=3.5.0
+
+# ===== Optional: Enhanced Notebook Experience =====
+
+# Interactive widgets for Jupyter
 ipywidgets>=7.6.0
 

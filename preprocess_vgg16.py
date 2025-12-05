@@ -139,11 +139,11 @@ def prepare_vgg_data():
     
     # Ensure raw data exists
     if not os.path.exists(RAW_DATA_DIR):
-        print(f"❌ Error: Raw data directory '{RAW_DATA_DIR}' not found.")
+        print(f"ERROR: Raw data directory '{RAW_DATA_DIR}' not found.")
         print(f"Please create the directory and organize your images as follows:")
         print(f"  {RAW_DATA_DIR}")
         for class_name in CLASSES:
-            print(f"    ├── {class_name}/")
+            print(f"    |-- {class_name}/")
         return
 
     # Check if any class folders exist
@@ -155,23 +155,23 @@ def prepare_vgg_data():
             break
     
     if not class_found:
-        print(f"❌ Error: No class folders found in '{RAW_DATA_DIR}'")
+        print(f"ERROR: No class folders found in '{RAW_DATA_DIR}'")
         print(f"Expected folders: {', '.join(CLASSES)}")
         return
 
     # Clear previous output and create the final structure
     if os.path.exists(VGG_OUTPUT_DIR):
-        print(f"⚠️  Removing existing output directory: {VGG_OUTPUT_DIR}")
+        print(f"WARNING: Removing existing output directory: {VGG_OUTPUT_DIR}")
         shutil.rmtree(VGG_OUTPUT_DIR)
     
     # Create directory structure: output/split/class/
-    print(f"📁 Creating output directory structure...")
+    print(f"Creating output directory structure...")
     for split in SPLIT_NAMES:
         for class_name in CLASSES:
             os.makedirs(os.path.join(VGG_OUTPUT_DIR, split, class_name), exist_ok=True)
             
     # Collect all file paths and their classes
-    print(f"📂 Collecting images from {RAW_DATA_DIR}...")
+    print(f"Collecting images from {RAW_DATA_DIR}...")
     all_files = []
     for class_name in CLASSES:
         class_path = os.path.join(RAW_DATA_DIR, class_name)
@@ -182,16 +182,16 @@ def prepare_vgg_data():
                     all_files.append((os.path.join(class_path, file_name), class_name))
                     image_count += 1
             if image_count > 0:
-                print(f"  ✓ Found {image_count} images in {class_name}/")
+                print(f"  [OK] Found {image_count} images in {class_name}/")
     
     if len(all_files) == 0:
-        print(f"❌ Error: No image files found in {RAW_DATA_DIR}")
+        print(f"ERROR: No image files found in {RAW_DATA_DIR}")
         print("Supported formats: .jpg, .jpeg, .png")
         return
     
     # 1. Stratified Train/Val/Test Split
     
-    print(f"\n📊 Performing stratified train/val/test split...")
+    print(f"\nPerforming stratified train/val/test split...")
     file_paths = [f[0] for f in all_files]
     class_labels = [f[1] for f in all_files]
     
@@ -220,7 +220,7 @@ def prepare_vgg_data():
         'test': list(zip(test_paths, test_labels))
     }
 
-    print(f"\n📈 Dataset Statistics:")
+    print(f"\nDataset Statistics:")
     print(f"  Total Images: {len(all_files)}")
     print(f"  Train: {len(train_paths)} ({len(train_paths)/len(all_files)*100:.1f}%)")
     print(f"  Val:   {len(val_paths)} ({len(val_paths)/len(all_files)*100:.1f}%)")
@@ -228,7 +228,7 @@ def prepare_vgg_data():
 
     # 2. Process and Save Files
     
-    print(f"\n🔄 Processing images...")
+    print(f"\nProcessing images...")
     failed_count = 0
     
     for split_name, file_list in splits.items():
@@ -239,7 +239,7 @@ def prepare_vgg_data():
             img = cv2.imread(file_path)
             
             if img is None:
-                print(f"\n⚠️  Warning: Failed to read image {file_path}. Skipping.")
+                print(f"\nWARNING: Failed to read image {file_path}. Skipping.")
                 failed_count += 1
                 continue
             
@@ -247,7 +247,7 @@ def prepare_vgg_data():
             cleaned_img = crop_brain_region(img)
             
             if cleaned_img is None:
-                print(f"\n⚠️  Warning: Failed to process image {file_path}. Skipping.")
+                print(f"\nWARNING: Failed to process image {file_path}. Skipping.")
                 failed_count += 1
                 continue
 
@@ -262,13 +262,80 @@ def prepare_vgg_data():
             # Save with same extension as original
             success = cv2.imwrite(output_path, vgg_img)
             if not success:
-                print(f"\n⚠️  Warning: Failed to save image {output_path}")
+                print(f"\nWARNING: Failed to save image {output_path}")
                 failed_count += 1
 
-    print(f"\n✅ VGG16 Preprocessing complete!")
-    print(f"📁 Output saved to: {VGG_OUTPUT_DIR}")
+    print(f"\n[SUCCESS] VGG16 Preprocessing complete!")
+    print(f"Output saved to: {VGG_OUTPUT_DIR}")
     if failed_count > 0:
-        print(f"⚠️  {failed_count} images failed to process")
+        print(f"WARNING: {failed_count} images failed to process")
+    
+    # 3. Create CSV metadata file
+    create_metadata_csv()
+
+
+def create_metadata_csv():
+    """Create CSV file with image paths, labels, and splits for training."""
+    import csv
+    
+    CSV_OUTPUT = 'data/dataset_metadata.csv'
+    
+    print(f"\nCreating dataset metadata CSV file...")
+    
+    # Collect all image information
+    metadata = []
+    
+    for split in SPLIT_NAMES:
+        split_path = os.path.join(VGG_OUTPUT_DIR, split)
+        if not os.path.exists(split_path):
+            continue
+        
+        for class_name in CLASSES:
+            class_path = os.path.join(split_path, class_name)
+            if not os.path.exists(class_path):
+                continue
+            
+            # Get all image files in this class folder
+            for file_name in os.listdir(class_path):
+                if file_name.lower().endswith(('.jpg', '.jpeg', '.png')):
+                    # Create relative path from VGG_OUTPUT_DIR
+                    relative_path = os.path.join(split, class_name, file_name)
+                    full_path = os.path.join(class_path, file_name)
+                    
+                    metadata.append({
+                        'image_path': relative_path,
+                        'full_path': full_path,
+                        'class': class_name,
+                        'split': split,
+                        'filename': file_name
+                    })
+    
+    if len(metadata) == 0:
+        print("WARNING: No images found for CSV creation.")
+        return
+    
+    # Create output directory if it doesn't exist
+    os.makedirs(os.path.dirname(CSV_OUTPUT), exist_ok=True)
+    
+    # Write to CSV
+    with open(CSV_OUTPUT, 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['image_path', 'full_path', 'class', 'split', 'filename']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        for row in metadata:
+            writer.writerow(row)
+    
+    # Print statistics
+    print(f"[SUCCESS] Metadata CSV created: {CSV_OUTPUT}")
+    print(f"  Total images: {len(metadata)}")
+    
+    # Count by split
+    split_counts = {split: sum(1 for item in metadata if item['split'] == split) for split in SPLIT_NAMES}
+    class_counts = {cls: sum(1 for item in metadata if item['class'] == cls) for cls in CLASSES}
+    
+    print(f"  Train: {split_counts.get('train', 0)}, Val: {split_counts.get('val', 0)}, Test: {split_counts.get('test', 0)}")
+    print(f"  CSV columns: image_path, full_path, class, split, filename")
 
 
 if __name__ == "__main__":
