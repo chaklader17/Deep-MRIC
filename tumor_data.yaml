@@ -1,0 +1,12 @@
+# YOLOv8 Dataset Configuration for Brain Tumor Detection
+# This file configures the dataset paths and class information for YOLOv8 training
+
+# Paths to image directories (relative to project root)
+train: data/yolov8/images/train
+val: data/yolov8/images/val
+
+# Number of classes
+nc: 1
+
+# Class names
+names: ["tumor"]
