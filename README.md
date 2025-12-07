@@ -28,16 +28,26 @@ The system provides comprehensive evaluation metrics including confusion matrice
    └──> Run preprocessing script/notebook
    └──> Generate train/val/test splits
 
-2. Model Training (Choose one or both)
+2. Model Training (Choose one or more)
    ├──> train_cnn.ipynb
    │    └──> Train CNN model
    │    └──> Generate evaluation metrics
-   │    └──> Save model and visualizations
+   │    └──> Save model and visualizations to models/cnn/
    │
-   └──> train_rnn_lstm.ipynb
-        └──> Train CNN-LSTM hybrid model
-        └──> Generate evaluation metrics
-        └──> Save model and visualizations
+   ├──> train_rnn_lstm.ipynb
+   │    └──> Train CNN-LSTM hybrid model
+   │    └──> Generate evaluation metrics
+   │    └──> Save model and visualizations to models/rnn_lstm/
+   │
+   ├──> train_kmeans.ipynb
+   │    └──> Train K-Means clustering model
+   │    └──> Generate clustering analysis and visualizations
+   │    └──> Save model and results to models/kmeans/
+   │
+   └──> train_yolov8.ipynb
+        └──> Train YOLOv8 detection model
+        └──> Generate detection metrics
+        └──> Save model and results to models/yolov8/
 
 3. Model Evaluation
    └──> Compare test accuracy
@@ -55,7 +65,7 @@ The system provides comprehensive evaluation metrics including confusion matrice
 ## 📌 Features  
 - ✔ **CNN Model** - Custom convolutional neural network for brain tumor classification
 - ✔ **RNN-LSTM Hybrid Model** - CNN feature extractor + LSTM sequential processing
-- ✔ **VGG16 Transfer Learning** - Pre-trained model for classification
+- ✔ **K-Means Clustering** - Unsupervised clustering for pattern discovery
 - ✔ **YOLOv8** - Tumor detection and localization with bounding boxes
 - ✔ Comprehensive evaluation metrics (Accuracy, Precision, Recall, F1-Score)
 - ✔ Confusion matrices and classification reports
@@ -86,15 +96,27 @@ Deep-MRIC/
 │       ├── images/
 │       └── labels/
 ├── models/                        # Saved model checkpoints (generated after training)
-│   ├── cnn_brain_tumor_classifier.pth
-│   ├── rnn_lstm_brain_tumor_classifier.pth
-│   ├── cnn_training_history.csv
-│   ├── rnn_lstm_training_history.csv
-│   └── [evaluation plots and reports]
+│   ├── cnn/                       # CNN model outputs
+│   │   ├── cnn_brain_tumor_classifier.pth
+│   │   ├── cnn_training_history.csv
+│   │   └── [evaluation plots and reports]
+│   ├── rnn_lstm/                  # RNN-LSTM model outputs
+│   │   ├── rnn_lstm_brain_tumor_classifier.pth
+│   │   ├── rnn_lstm_training_history.csv
+│   │   └── [evaluation plots and reports]
+│   ├── kmeans/                    # K-Means clustering outputs
+│   │   ├── kmeans_clusterer.pkl
+│   │   ├── kmeans_results.csv
+│   │   └── visualizations/
+│   └── yolov8/                    # YOLOv8 detection outputs
+│       └── yolov8_tumor_detection/
 ├── preprocess_vgg16.py           # Python script for data preprocessing
 ├── preprocess_vgg16.ipynb         # Jupyter notebook for interactive preprocessing
+├── prepare_yolo_dataset.py        # YOLOv8 dataset preparation script
 ├── train_cnn.ipynb                # CNN model training notebook
 ├── train_rnn_lstm.ipynb          # RNN-LSTM model training notebook
+├── train_kmeans.ipynb             # K-Means clustering training notebook
+├── train_yolov8.ipynb             # YOLOv8 detection training notebook
 ├── requirements.txt               # pip requirements (Windows & Linux compatible)
 ├── environment.yml                # conda environment file (Windows & Linux compatible)
 └── README.md
@@ -127,11 +149,87 @@ Deep-MRIC/
 
 ## 2️⃣ Installation
 
-### Option A: Using pip (Recommended for most users)
+This project supports multiple training models: **CNN**, **RNN-LSTM**, **K-Means Clustering**, and **YOLOv8**. All dependencies are included in the installation.
+
+### Option A: Using conda (Recommended - Works on both Windows & Linux)
+
+Conda is recommended as it handles all dependencies including PyTorch, CUDA, and other packages automatically.
 
 #### Windows Installation:
 
-1. **Open Command Prompt or PowerShell** (Run as Administrator if needed)
+1. **Open Anaconda Prompt or Command Prompt**
+
+2. **Clone the repository:**
+```cmd
+git clone https://github.com/chaklader17/Deep-MRIC.git
+cd Deep-MRIC
+```
+
+3. **Create conda environment from environment.yml:**
+```cmd
+conda env create -f environment.yml
+```
+
+4. **Activate the environment:**
+```cmd
+conda activate deep-mric
+```
+
+5. **Verify installation:**
+```cmd
+python --version
+conda list
+```
+
+**Note:** The `environment.yml` file includes all dependencies needed for:
+- CNN training (`train_cnn.ipynb`)
+- RNN-LSTM training (`train_rnn_lstm.ipynb`)
+- K-Means clustering (`train_kmeans.ipynb`)
+- YOLOv8 detection (`train_yolov8.ipynb`)
+
+If you need PyTorch with CUDA support, install it separately:
+```cmd
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+```
+
+#### Linux Installation:
+
+1. **Open Terminal**
+
+2. **Clone the repository:**
+```bash
+git clone https://github.com/chaklader17/Deep-MRIC.git
+cd Deep-MRIC
+```
+
+3. **Create conda environment from environment.yml:**
+```bash
+conda env create -f environment.yml
+```
+
+4. **Activate the environment:**
+```bash
+conda activate deep-mric
+```
+
+5. **Verify installation:**
+```bash
+python3 --version
+conda list
+```
+
+**Note:** The `environment.yml` file includes all dependencies needed for all training notebooks.
+
+If you need PyTorch with CUDA support, install it separately:
+```bash
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+```
+
+### Option B: Using pip (Alternative method)
+
+#### Windows Installation:
+
+1. **Open Command Prompt or PowerShell**
 
 2. **Clone the repository:**
 ```cmd
@@ -149,20 +247,23 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-5. **Upgrade pip (recommended):**
+5. **Upgrade pip:**
 ```cmd
 python -m pip install --upgrade pip
 ```
 
-6. **Install PyTorch with CUDA (if you have NVIDIA GPU):**
-   - Visit [PyTorch Installation](https://pytorch.org/get-started/locally/)
-   - Select your CUDA version and copy the installation command
+6. **Install PyTorch (CPU or CUDA):**
+   - **For CPU only:**
+   ```cmd
+   pip install torch torchvision torchaudio
+   ```
+   - **For CUDA support:** Visit [PyTorch Installation](https://pytorch.org/get-started/locally/) and select your CUDA version
    - Example for CUDA 11.8:
-```cmd
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
+   ```cmd
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   ```
 
-7. **Install other dependencies:**
+7. **Install all other dependencies:**
 ```cmd
 pip install -r requirements.txt
 ```
@@ -192,82 +293,39 @@ source venv/bin/activate
 python -m pip install --upgrade pip
 ```
 
-6. **Install PyTorch with CUDA (if you have NVIDIA GPU):**
-   - Visit [PyTorch Installation](https://pytorch.org/get-started/locally/)
+6. **Install PyTorch (CPU or CUDA):**
+   - **For CPU only:**
+   ```bash
+   pip install torch torchvision torchaudio
+   ```
+   - **For CUDA support:** Visit [PyTorch Installation](https://pytorch.org/get-started/locally/) and select your CUDA version
    - Example for CUDA 11.8:
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
+   ```bash
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   ```
 
-7. **Install other dependencies:**
+7. **Install all other dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-### Option B: Using conda (Recommended for data science workflows)
-
-#### Windows Installation:
-
-1. **Open Anaconda Prompt or Command Prompt**
-
-2. **Clone the repository:**
-```cmd
-git clone https://github.com/chaklader17/Deep-MRIC.git
-cd Deep-MRIC
-```
-
-3. **Create conda environment:**
-```cmd
-conda env create -f environment.yml
-```
-
-4. **Activate the environment:**
-```cmd
-conda activate deep-mric
-```
-
-5. **Install PyTorch with CUDA (if needed):**
-```cmd
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-```
-
-#### Linux Installation:
-
-1. **Open Terminal**
-
-2. **Clone the repository:**
-```bash
-git clone https://github.com/chaklader17/Deep-MRIC.git
-cd Deep-MRIC
-```
-
-3. **Create conda environment:**
-```bash
-conda env create -f environment.yml
-```
-
-4. **Activate the environment:**
-```bash
-conda activate deep-mric
-```
-
-5. **Install PyTorch with CUDA (if needed):**
-```bash
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-```
-
 ### Verify Installation
+
+After installation, verify that all packages are correctly installed:
 
 #### Windows:
 ```cmd
 # Check Python version (should be 3.8+)
 python --version
 
-# Check if key packages are installed
-python -c "import cv2, numpy, sklearn, tqdm, torch, torchvision, pandas, seaborn; print('✅ All packages installed successfully!')"
+# Check if all key packages are installed
+python -c "import cv2, numpy, sklearn, tqdm, torch, torchvision, pandas, seaborn, ultralytics; print('All packages installed successfully!')"
 
 # Check PyTorch and CUDA
 python -c "import torch; print(f'PyTorch version: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}')"
+
+# Check YOLOv8
+python -c "from ultralytics import YOLO; print('YOLOv8 installed successfully!')"
 
 # For Jupyter notebook support
 jupyter --version
@@ -278,15 +336,54 @@ jupyter --version
 # Check Python version (should be 3.8+)
 python3 --version
 
-# Check if key packages are installed
-python3 -c "import cv2, numpy, sklearn, tqdm, torch, torchvision, pandas, seaborn; print('✅ All packages installed successfully!')"
+# Check if all key packages are installed
+python3 -c "import cv2, numpy, sklearn, tqdm, torch, torchvision, pandas, seaborn, ultralytics; print('All packages installed successfully!')"
 
 # Check PyTorch and CUDA
 python3 -c "import torch; print(f'PyTorch version: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}')"
 
+# Check YOLOv8
+python3 -c "from ultralytics import YOLO; print('YOLOv8 installed successfully!')"
+
 # For Jupyter notebook support
 jupyter --version
 ```
+
+### Running Training Notebooks
+
+Once installation is complete, you can run any of the training notebooks:
+
+#### Windows:
+```cmd
+# Make sure environment is activated
+conda activate deep-mric  # or: venv\Scripts\activate
+
+# Start Jupyter Notebook
+jupyter notebook
+```
+
+Then open any of these notebooks in Jupyter:
+- `train_cnn.ipynb` - Train CNN model
+- `train_rnn_lstm.ipynb` - Train RNN-LSTM model
+- `train_kmeans.ipynb` - Train K-Means clustering
+- `train_yolov8.ipynb` - Train YOLOv8 detection model
+
+#### Linux:
+```bash
+# Make sure environment is activated
+conda activate deep-mric  # or: source venv/bin/activate
+
+# Start Jupyter Notebook
+jupyter notebook
+```
+
+Then open any of these notebooks in Jupyter:
+- `train_cnn.ipynb` - Train CNN model
+- `train_rnn_lstm.ipynb` - Train RNN-LSTM model
+- `train_kmeans.ipynb` - Train K-Means clustering
+- `train_yolov8.ipynb` - Train YOLOv8 detection model
+
+**Note:** Each model saves to its own directory (`models/cnn/`, `models/rnn_lstm/`, `models/kmeans/`, `models/yolov8/`), so you can train all models without conflicts.
 
 ---
 
@@ -465,14 +562,26 @@ names: ["tumor"]
 ### Workflow Overview:
 
 1. **Data Preprocessing** → Organize and preprocess raw MRI images
-2. **Model Training** → Train CNN and/or RNN-LSTM models using Jupyter notebooks
+2. **Model Training** → Train any combination of models:
+   - CNN (supervised classification)
+   - RNN-LSTM (supervised classification)
+   - K-Means (unsupervised clustering)
+   - YOLOv8 (object detection)
 3. **Model Evaluation** → Generate confusion matrices, classification reports, and visualizations
 4. **Model Comparison** → Compare performance metrics between different models
 
+### Available Training Notebooks:
+
+| Notebook | Model Type | Output Directory | Description |
+|----------|------------|-----------------|-------------|
+| `train_cnn.ipynb` | Supervised Classification | `models/cnn/` | Custom CNN architecture for image classification |
+| `train_rnn_lstm.ipynb` | Supervised Classification | `models/rnn_lstm/` | Hybrid CNN-LSTM model for sequential feature processing |
+| `train_kmeans.ipynb` | Unsupervised Clustering | `models/kmeans/` | K-Means clustering for pattern discovery |
+| `train_yolov8.ipynb` | Object Detection | `models/yolov8/` | YOLOv8 for tumor detection with bounding boxes |
+
 ### Training Process:
 
-The training notebooks (`train_cnn.ipynb` and `train_rnn_lstm.ipynb`) follow this process:
-
+**For CNN and RNN-LSTM notebooks:**
 1. **Data Loading**: Load preprocessed images from `data/vgg16_classification/`
 2. **Data Augmentation**: Apply transformations (rotation, flipping, etc.) for training
 3. **Model Definition**: Define CNN or CNN-LSTM architecture
@@ -481,43 +590,53 @@ The training notebooks (`train_cnn.ipynb` and `train_rnn_lstm.ipynb`) follow thi
 6. **Evaluation**: Test on test set and generate metrics
 7. **Visualization**: Create plots for training curves, confusion matrices, and sample predictions
 
+**For K-Means notebook:**
+1. **Data Loading**: Load images and extract features
+2. **Feature Extraction**: Flatten images and apply PCA (optional)
+3. **Clustering**: Apply K-Means algorithm
+4. **Evaluation**: Calculate silhouette score, inertia, and Adjusted Rand Index
+5. **Visualization**: Create cluster visualizations, confusion matrix, and elbow method plots
+
+**For YOLOv8 notebook:**
+1. **Dataset Check**: Verify YOLOv8 dataset structure
+2. **Model Initialization**: Load pre-trained YOLOv8 model
+3. **Training**: Train with validation monitoring
+4. **Evaluation**: Calculate mAP, precision, and recall metrics
+5. **Testing**: Test on sample images with bounding box predictions
+
 ---
 
 ## 1️⃣ Train CNN Model
 
 **Important:** Make sure you've run the preprocessing script first (see [Data Preprocessing](#3️⃣-data-preprocessing) section).
 
-### Windows:
+### Windows & Linux:
 
-1. **Activate your virtual environment:**
+**Using Conda (Recommended):**
 ```cmd
+# Windows
+conda activate deep-mric
+jupyter notebook
+
+# Linux
+conda activate deep-mric
+jupyter notebook
+```
+
+**Using pip/venv:**
+```cmd
+# Windows
 venv\Scripts\activate
-```
-
-2. **Start Jupyter Notebook:**
-```cmd
 jupyter notebook
-```
 
-3. **Open `train_cnn.ipynb`** in the browser
-
-4. **Run all cells** (Cell → Run All) or run cells sequentially
-
-### Linux:
-
-1. **Activate your virtual environment:**
-```bash
+# Linux
 source venv/bin/activate
-```
-
-2. **Start Jupyter Notebook:**
-```bash
 jupyter notebook
 ```
 
-3. **Open `train_cnn.ipynb`** in the browser
-
-4. **Run all cells** (Cell → Run All) or run cells sequentially
+Then:
+1. **Open `train_cnn.ipynb`** in the browser
+2. **Run all cells** (Cell → Run All) or run cells sequentially
 
 ### What the Notebook Does:
 
@@ -529,7 +648,8 @@ jupyter notebook
   - Classification report (precision, recall, F1-score)
   - Training/validation curves
   - Sample predictions visualization
-- Saves model to `models/cnn_brain_tumor_classifier.pth`
+- Saves model to `models/cnn/cnn_brain_tumor_classifier.pth`
+- Saves all outputs (curves, confusion matrix, reports) to `models/cnn/`
 
 ---
 
@@ -539,37 +659,33 @@ The RNN-LSTM notebook trains a hybrid CNN-LSTM model that combines:
 - **CNN layers** for spatial feature extraction
 - **LSTM layers** for sequential processing of features
 
-### Windows:
+### Windows & Linux:
 
-1. **Activate your virtual environment:**
+**Using Conda (Recommended):**
 ```cmd
+# Windows
+conda activate deep-mric
+jupyter notebook
+
+# Linux
+conda activate deep-mric
+jupyter notebook
+```
+
+**Using pip/venv:**
+```cmd
+# Windows
 venv\Scripts\activate
-```
-
-2. **Start Jupyter Notebook:**
-```cmd
 jupyter notebook
-```
 
-3. **Open `train_rnn_lstm.ipynb`** in the browser
-
-4. **Run all cells** (Cell → Run All)
-
-### Linux:
-
-1. **Activate your virtual environment:**
-```bash
+# Linux
 source venv/bin/activate
-```
-
-2. **Start Jupyter Notebook:**
-```bash
 jupyter notebook
 ```
 
-3. **Open `train_rnn_lstm.ipynb`** in the browser
-
-4. **Run all cells** (Cell → Run All)
+Then:
+1. **Open `train_rnn_lstm.ipynb`** in the browser
+2. **Run all cells** (Cell → Run All)
 
 ### What the Notebook Does:
 
@@ -580,7 +696,8 @@ jupyter notebook
   - Fully connected layers for classification
 - Trains the model with the same training pipeline as CNN
 - Generates the same evaluation metrics and visualizations
-- Saves model to `models/rnn_lstm_brain_tumor_classifier.pth`
+- Saves model to `models/rnn_lstm/rnn_lstm_brain_tumor_classifier.pth`
+- Saves all outputs (curves, confusion matrix, reports) to `models/rnn_lstm/`
 
 ### Model Comparison:
 
@@ -615,24 +732,124 @@ python scripts/classify_vgg16.py \
 
 ---
 
-## 4️⃣ Train YOLOv8 — Detection (Optional)
+## 3️⃣ Train K-Means Clustering Model
+
+K-Means is an **unsupervised learning** algorithm that groups similar images together without requiring labeled data.
+
+### Windows & Linux:
+
+**Using Conda (Recommended):**
+```cmd
+# Windows
+conda activate deep-mric
+jupyter notebook
+
+# Linux
+conda activate deep-mric
+jupyter notebook
+```
+
+**Using pip/venv:**
+```cmd
+# Windows
+venv\Scripts\activate
+jupyter notebook
+
+# Linux
+source venv/bin/activate
+jupyter notebook
+```
+
+Then:
+1. **Open `train_kmeans.ipynb`** in the browser
+2. **Run all cells** (Cell → Run All)
+
+### What the Notebook Does:
+
+- Loads images from `data/vgg16_classification/train/`
+- Extracts features (flattens images, applies PCA for dimensionality reduction)
+- Applies K-Means clustering with configurable number of clusters (default: 4)
+- Evaluates clustering performance:
+  - Silhouette Score
+  - Adjusted Rand Index (compares clusters to true labels)
+  - Inertia (within-cluster sum of squares)
+- Generates visualizations:
+  - Cluster-to-class mapping heatmap
+  - Confusion matrix (mapping clusters to most common class)
+  - Silhouette analysis
+  - PCA 2D visualization
+  - Cluster centers visualization
+  - Sample images from each cluster
+  - Elbow method for optimal K selection
+- Saves model to `models/kmeans/kmeans_clusterer.pkl`
+- Saves all outputs to `models/kmeans/`
+
+**Note:** K-Means is unsupervised - it doesn't use class labels during training, but can compare cluster assignments with true labels for evaluation.
+
+---
+
+## 4️⃣ Train YOLOv8 — Detection Model
 
 YOLOv8 is used for tumor detection and localization with bounding boxes.
 
-### Windows:
+**Important:** Before training YOLOv8, you need to prepare the dataset:
 ```cmd
-yolo task=detect mode=train model=yolov8n.pt data=tumor_data.yaml epochs=50 imgsz=640 name=yolov8_tumor_detection
+# Windows
+python prepare_yolo_dataset.py
+
+# Linux
+python3 prepare_yolo_dataset.py
 ```
 
-### Linux:
-```bash
-yolo task=detect mode=train \
-    model=yolov8n.pt \
-    data=tumor_data.yaml \
-    epochs=50 \
-    imgsz=640 \
-    name=yolov8_tumor_detection
+This creates the YOLOv8 dataset structure in `data/yolov8/`.
+
+### Windows & Linux:
+
+**Using Conda (Recommended):**
+```cmd
+# Windows
+conda activate deep-mric
+jupyter notebook
+
+# Linux
+conda activate deep-mric
+jupyter notebook
 ```
+
+**Using pip/venv:**
+```cmd
+# Windows
+venv\Scripts\activate
+jupyter notebook
+
+# Linux
+source venv/bin/activate
+jupyter notebook
+```
+
+Then:
+1. **Open `train_yolov8.ipynb`** in the browser
+2. **Run all cells** (Cell → Run All)
+
+### What the Notebook Does:
+
+- Checks YOLOv8 dataset structure
+- Initializes YOLOv8 model (nano, small, medium, large, or xlarge)
+- Trains the model with configurable hyperparameters:
+  - Epochs (default: 50)
+  - Batch size (default: 16)
+  - Image size (default: 640x640)
+  - Early stopping patience
+- Evaluates on validation set:
+  - mAP@0.5
+  - mAP@0.5:0.95
+  - Precision
+  - Recall
+- Tests on sample images with bounding box predictions
+- Saves model to `models/yolov8/yolov8_tumor_detection/weights/best.pt`
+- Saves all outputs (training plots, predictions) to `models/yolov8/`
+
+**Note:** YOLOv8 requires bounding box annotations. The `prepare_yolo_dataset.py` script creates a basic structure, but for real detection, you may need to manually annotate images using tools like [LabelImg](https://github.com/tzutalin/labelImg).
 
 ---
 
@@ -653,7 +870,7 @@ import torchvision.transforms as transforms
 
 # Load trained CNN model
 model = BrainTumorCNN(num_classes=4)
-checkpoint = torch.load('models/cnn_brain_tumor_classifier.pth')
+checkpoint = torch.load('models/cnn/cnn_brain_tumor_classifier.pth')
 model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
