@@ -924,12 +924,12 @@ runs/detect/predict/
 Both CNN and RNN-LSTM notebooks automatically generate comprehensive evaluation metrics:
 
 ### Classification Metrics:
-- **Accuracy**: Overall classification accuracy
+- **Accuracy**: Overall classification accuracy (calculated using `sklearn.metrics.accuracy_score`)
 - **Precision**: Per-class and macro/micro averages
 - **Recall**: Per-class and macro/micro averages
 - **F1-Score**: Per-class and macro/micro averages
-- **Confusion Matrix**: Visual heatmap showing classification performance
-- **Classification Report**: Detailed per-class metrics saved to text file
+- **Confusion Matrix**: Visual heatmap showing classification performance (generated using `sklearn.metrics.confusion_matrix` and visualized with `seaborn.heatmap`)
+- **Classification Report**: Detailed per-class metrics saved to text file (generated using `sklearn.metrics.classification_report`)
 
 ### Visualizations Generated:
 - **Training Curves**: Loss and accuracy plots for training and validation
@@ -994,14 +994,14 @@ All dependencies are listed in `requirements.txt` and `environment.yml`. The mai
 ## Core Dependencies
 - **opencv-python** (≥4.5.0) - Image processing and computer vision
 - **numpy** (≥1.21.0) - Numerical computing
-- **scikit-learn** (≥1.0.0) - Machine learning utilities (train/test split)
+- **scikit-learn** (≥1.0.0) - Machine learning utilities (train/test split, evaluation metrics: accuracy_score, classification_report, confusion_matrix)
 - **tqdm** (≥4.62.0) - Progress bars
 
 ## Deep Learning (for training)
 - **torch** (≥1.12.0) - PyTorch framework for deep learning
 - **torchvision** (≥0.13.0) - PyTorch vision utilities and datasets
 - **pandas** (≥1.3.0) - Data manipulation and analysis
-- **seaborn** (≥0.12.0) - Statistical data visualization (for confusion matrices)
+- **seaborn** (≥0.12.0) - Statistical data visualization (for confusion matrix heatmaps and evaluation visualizations)
 - **ultralytics** - YOLOv8 implementation (optional, for detection)
 
 ## Jupyter Notebook Support
