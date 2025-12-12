@@ -8,16 +8,16 @@ dependencies:
   - jupyter
   - ipykernel
   - numpy>=1.21.0
-  - scikit-learn>=1.0.0
+  - scikit-learn>=1.0.0  # For train/test split, evaluation metrics (accuracy_score, classification_report, confusion_matrix)
   - tqdm>=4.62.0
   - matplotlib>=3.5.0
   - pandas>=1.3.0
-  - seaborn>=0.12.0
+  - seaborn>=0.12.0  # For confusion matrix heatmaps and evaluation visualizations
   - pip:
     - opencv-python>=4.5.0
-    - pillow>=9.0.0
+    - pillow>=9.0.0  # For image loading and manipulation (used in augment_training_data.py)
     - ipywidgets>=7.6.0
     - torch>=1.12.0
-    - torchvision>=0.13.0
+    - torchvision>=0.13.0  # For data augmentation transforms (used in augment_training_data.py)
     - ultralytics>=8.0.0
 

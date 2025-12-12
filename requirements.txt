@@ -1,15 +1,21 @@
-# Requirements for VGG16 Brain Tumor Classification Preprocessing
+# Requirements for Brain Tumor Classification and Detection
 # Compatible with both Windows and Linux
 #
 # To install all requirements:
 #   pip install -r requirements.txt
 #
-# For Jupyter Notebook (preprocess_vgg16.ipynb), all packages below are required
+# This includes dependencies for:
+# - Data preprocessing (preprocess_vgg16.py/ipynb)
+# - Data augmentation (augment_training_data.py)
+# - Model training (CNN, RNN-LSTM, RNN-GRU, K-Means, YOLOv8 notebooks)
 
 # ===== Core Dependencies (Required for preprocessing) =====
 
 # Computer Vision - Image processing and brain region cropping
 opencv-python>=4.5.0
+
+# Image Processing - PIL/Pillow for image loading and manipulation (used in augmentation)
+pillow>=9.0.0
 
 # Numerical Computing - Array operations
 numpy>=1.21.0
