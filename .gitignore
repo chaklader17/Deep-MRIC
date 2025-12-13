@@ -62,3 +62,5 @@ runs/
 *.bak
 
 models/cnn/cnn_brain_tumor_classifier.pth
+models/cnn/cnn_brain_tumor_classifier.pth
+models/cnn/cnn_brain_tumor_classifier.pth
